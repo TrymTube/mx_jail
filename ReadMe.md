@@ -8,12 +8,9 @@ it allows players to quit the game while in jail and the time still runs
 - Download
 - the DB Column should be created automaticly if not insert the SQL down below
 - Put it in the `resource` directory
-- Add it in your server.cfg
+- Add it in your server.cfg // `ensure mx_jail`
 - Enjoy
 
-```
-ensure mx_jail
-```
 
 ## SQL
 
