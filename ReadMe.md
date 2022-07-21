@@ -19,4 +19,5 @@ ALTER TABLE `users` ADD COLUMN `jail_remaintime` INT NOT NULL DEFAULT '0';
 
 ### TOS
 
-Do not resell or try to rip this Script in any way.
+this script is free to use. you are free to make any changes for your own purpose only
+do not reupload or sell this script any where
