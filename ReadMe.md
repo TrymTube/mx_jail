@@ -18,6 +18,7 @@ ensure mx_jail
 ## SQL
 
 ALTER TABLE `users` ADD COLUMN `jail_time` INT NOT NULL DEFAULT '0';
+
 ALTER TABLE `users` ADD COLUMN `jail_remaintime` INT NOT NULL DEFAULT '0';
 
 ### TOS
@@ -28,8 +29,11 @@ Do not resell or try to rip this Script in any way.
 ## Changelogs
 
 Version 1.0.2
+    
     - added folders for plugins ( coming soon )
+    
     - fixed error code client/main.lua:20 when connecting
 
 Version 1.0.1
+    
     - fixed showing minus time left
