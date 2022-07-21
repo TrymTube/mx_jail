@@ -10,7 +10,7 @@ Locales['de'] = {
     ['notify_cant_jail_yourself'] = 'Du kannst dich nicht selber inhaftieren',
     ['notify_max_jailtime'] = 'Die max. Inhaftierungszeit beträgt %s',
     ['notify_min_jailtime'] = 'Die min. Inhaftierungszeit beträgt %s',
-    ['notify_unjailed_player'] = 'Du hast %s erfolgreich inhaftiert',
+    ['notify_unjailed_player'] = 'Du hast %s %s erfolgreich entlassen',
     ['notify_updated_jailtime'] = 'Du hast die Inhaftierungszeit von %s, von %s zu %s geändert',
     ['notify_jail_released'] = 'Du wurdest vom Gefängnis entlassen',
         
@@ -24,8 +24,9 @@ Locales['de'] = {
     ['title_jail_list_time'] = 'Orig. Zeit',
     ['title_jail_list_timeleft'] = 'Verbleibende Zeit',
     ['title_jail_list_actions'] = 'Aktionen',
-    ['action_jail_list_update'] = 'Entlassen',
-    ['action_jail_list_unjail'] = 'Update Inhaftierungszeit',
+    ['action_jail_list_update'] = 'Update Inhaftierungszeit',
+    ['action_jail_list_unjail'] = 'Entlassen',
+    ['title_jail_dialog_update_jailtime'] = 'Update Inhaftierungszeit von %s %s',
 
     -- server/commands.lua -- Commands 
     ['chatnotify_max_jailtime'] = '[^1ERROR^0] Die max. Inhaftierungszeit beträgt ^3%s',

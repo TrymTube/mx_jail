@@ -170,7 +170,9 @@ CreateThread(function()
                     local dist = #(JailCoords - playerCoords)
 
                     if dist > 500 then
-                        teleportJail(player)
+                        if Config.teleportBack then
+                            teleportJail(player)
+                        end
                     end
 
                     if Config.Debug then
@@ -214,16 +216,14 @@ function openMenu()
                 title = _U('title_jail_dialog_playername')
             },
             function(data2, menu2)
-                local playerPed = GetPlayerPed(player)
-                local playerId = GetPlayerServerId(playerPed)
-
-                ESX.TriggerServerCallback('mx_jail:getNames', function(doesNameExist, player)
+                
+                ESX.TriggerServerCallback('mx_jail:getNames', function(doesNameExist, player, source)
                     if doesNameExist then
                         ESX.TriggerServerCallback('mx_jail:getDBValuesPlayer', function(result, osTime)
                             if result[1].jail_remaintime > 0 then
                                 TriggerEvent('mx_jail:playerNotify', _U('notify_player_alrd_jail'), 5000, 'error')
                             else
-                                if playerPed ~= GetPlayerPed(PlayerPedId()) then
+                                if source ~= player then
                                     menu2.close()
                                     ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'jail_dialog_time',
                                     {
@@ -308,7 +308,7 @@ function openListMenu()
             elseif data.value == 'update' then
                 ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'update_jailtime',
                 {
-                    title = _U('title_jail_dialog_jailtime')
+                    title = _U('title_jail_dialog_update_jailtime', data.data.firstname, data.data.lastname)
                 },
                 function(data2, menu2)
                     if tonumber(data2.value) >= Config.minJailTime then

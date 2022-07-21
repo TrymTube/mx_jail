@@ -26,6 +26,7 @@ end)
 ESX.RegisterServerCallback('mx_jail:getNames', function(source, cb, name)
     local xPlayers = ESX.GetExtendedPlayers()
     local doesNameExist = false
+    local targetxPlayer
 
     for k, xPlayer in pairs(xPlayers) do
         local upperName = string.upper(name)
@@ -35,11 +36,14 @@ ESX.RegisterServerCallback('mx_jail:getNames', function(source, cb, name)
             doesNameExist = true
         end
 
-        if doesNameExist then
-            cb(true, xPlayer.source)
-        elseif not doesNameExist then
-            cb(false)
-        end
+        targetxPlayer = xPlayer.source
+    end
+
+    if doesNameExist then
+        print(doesNameExist)
+        cb(true, targetxPlayer, source)
+    elseif not doesNameExist then
+        cb(false)
     end
 end)
 
