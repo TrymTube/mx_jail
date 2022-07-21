@@ -17,8 +17,7 @@ AddEventHandler('esx:playerLoaded',function(xPlayer, isNew, skin)
                 print('Jailtime has been set to 0')
             end
 
-            exitJail()
-            TriggerServerEvent('mx_jail:setTime', 0)
+            TriggerServerEvent('mx_jail:setTime', PlayerPedId(), 0)
         elseif timeRemaining < result[1].jail_remaintime then
             teleportJail(PlayerPedId())
 

@@ -27,5 +27,9 @@ Do not resell or try to rip this Script in any way.
 
 ## Changelogs
 
+Version 1.0.2
+    - added folders for plugins ( coming soon )
+    - fixed error code client/main.lua:20 when connecting
+
 Version 1.0.1
     - fixed showing minus time left
