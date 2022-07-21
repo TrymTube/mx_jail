@@ -283,15 +283,17 @@ function openListMenu()
                 local timeLeft = (time - v.jail_time) / 60
                 local timeRemaining = (v.jail_remaintime - timeLeft)
                 local minutes = string.format('%02.0f', timeRemaining)
-                table.insert(elements.rows, {
-                    data = v,
-                    cols = {
-                        jailedName,
-                        v.jail_remaintime, 
-                        minutes, 
-                        '{{'.._U('action_jail_list_update')..'|update}} {{' .. _U('action_jail_list_unjail') .. '|unjail}}'
-                    }
-                })
+                if tonumber(minutes) > 0 then
+                    table.insert(elements.rows, {
+                        data = v,
+                        cols = {
+                            jailedName,
+                            v.jail_remaintime, 
+                            minutes, 
+                            '{{'.._U('action_jail_list_update')..'|update}} {{' .. _U('action_jail_list_unjail') .. '|unjail}}'
+                        }
+                    })
+                end
             end
         end
         

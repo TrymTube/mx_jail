@@ -2,8 +2,8 @@ fx_version 'bodacious'
 game 'gta5'
 
 author 'Max'
-description ''
-version '0.1'
+description 'jailsystem'
+version '1.0.1'
 
 lua54 'on'
 

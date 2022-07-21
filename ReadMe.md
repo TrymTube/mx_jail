@@ -23,3 +23,9 @@ ALTER TABLE `users` ADD COLUMN `jail_remaintime` INT NOT NULL DEFAULT '0';
 ### TOS
 
 Do not resell or try to rip this Script in any way.
+
+
+## Changelogs
+
+Version 1.0.1
+    - fixed showing minus time left
