@@ -10,14 +10,16 @@ AddEventHandler('esx:playerLoaded',function(xPlayer, isNew, skin)
 
     ESX.TriggerServerCallback('mx_jail:getDBValues', function(result, time, remainTime)
         local dbRemainTime = result[1].jail_remaintime
-        local timeRemaining = (time - result[1].jail_time) / 60
+        local timeRemaining = (time - result[1].jail_time) / 60 
+        local playerIndex = PlayerId()
+        local playerId = GetPlayerServerId(playerIndex)
 
         if (timeRemaining >= dbRemainTime) and (dbRemainTime == 0) then
             if Config.Debug then
                 print('Jailtime has been set to 0')
             end
 
-            TriggerServerEvent('mx_jail:setTime', PlayerPedId(), 0)
+            TriggerServerEvent('mx_jail:setTime', playerId, 0)
         elseif timeRemaining < result[1].jail_remaintime then
             teleportJail(PlayerPedId())
 

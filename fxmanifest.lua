@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Max'
 description 'jailsystem'
-version '1.0.2'
+version '1.0.1'
 
 lua54 'on'
 
@@ -24,4 +24,7 @@ server_scripts {
 	'plugins/**/*_server.lua',
 	'@oxmysql/lib/MySQL.lua',
 	'server/*.lua'
+}
+
+escrow_ignore {
 }
