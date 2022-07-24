@@ -10,6 +10,7 @@ lua54 'on'
 shared_script {
 	'@es_extended/imports.lua',
 	'plugins/**/*_shared.lua',
+	'plugins/**/*_config.lua',
 	'@es_extended/locale.lua',
 	'locales/*.lua',
 	'config.lua',

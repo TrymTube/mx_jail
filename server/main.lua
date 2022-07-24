@@ -1,16 +1,9 @@
 ESX = exports['es_extended']:getSharedObject()
 
-MySQL.ready(function()
-    -- auto-add table if not exists
-    MySQL.Sync.execute(
-        'ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `jail_time` INT NOT NULL DEFAULT 0, ADD COLUMN IF NOT EXISTS `jail_remaintime` INT NOT NULL DEFAULT 0'
-    )
-end)
-
 ESX.RegisterServerCallback('mx_jail:getDBValues', function(source, cb)
     local xPlayer = ESX.GetPlayerFromId(source)
    
-    MySQL.Async.fetchAll('SELECT jail_time, jail_remaintime FROM users WHERE identifier = ?', {xPlayer.identifier}, function(result)
+    MySQL.Async.fetchAll('SELECT jail_time, jailed_date, jail_remaintime FROM users WHERE identifier = ?', {xPlayer.identifier}, function(result)
         if result then 
             cb(result, os.time())
         end
@@ -22,6 +15,20 @@ ESX.RegisterServerCallback('mx_jail:getJailedPlayer', function(source, cb)
         cb(result, os.time())
     end)
 end)
+
+-- RegisterNetEvent('mx_jail:getPlayerNames')
+-- AddEventHandler('mx_jail:getPlayerNames', function()
+--     local source = source 
+--     local xPlayer = ESX.GetPlayerFromId(source)
+    
+--     local query = MySQL.query('SELECT firstname, lastname FROM users WHERE identifier = ?', {xPlayer.identifier})
+    
+--     local data = {
+--         firstname = query[1].firstname,
+--         lastname = query[1].lastname,
+--         fullname = query[1].firstname..' '..query[1].lastname,
+--     }
+-- end)
 
 ESX.RegisterServerCallback('mx_jail:getNames', function(source, cb, name)
     local xPlayers = ESX.GetExtendedPlayers()
@@ -61,7 +68,7 @@ end)
 ESX.RegisterServerCallback('mx_jail:getDBValuesPlayer', function(source, cb, playerId)
     local xPlayer = ESX.GetPlayerFromId(playerId)
    
-    MySQL.Async.fetchAll('SELECT jail_time, jail_remaintime FROM users WHERE identifier = ?', {xPlayer.identifier}, function(result)
+    MySQL.Async.fetchAll('SELECT jail_time, jailed_date, jail_remaintime FROM users WHERE identifier = ?', {xPlayer.identifier}, function(result)
         if result then 
             cb(result, os.time())
         else
@@ -75,24 +82,42 @@ RegisterNetEvent('mx_jail:setTime')
 AddEventHandler('mx_jail:setTime', function(playerID, time)
     local targetxPlayer = ESX.GetPlayerFromId(playerID)
     local osTime = os.time()
+    local raw = os.date("*t")
+    local clock
+    local date
+    
+    if Config.USClock then
+        clock = os.date("%I:%M %p")
+        date = raw.month.."/"..raw.day.."/"..raw.year
+    else
+        clock = os.date("%H:%M")
+        date = raw.day.."."..raw.month.."."..raw.year
+    end
 
-    MySQL.update('UPDATE users SET jail_time = ?, jail_remaintime = ? WHERE identifier = ?', {osTime, time, targetxPlayer.identifier})
-end)
+    local jailedDate = date.." ".. clock
 
--- sets the time when jailed
-RegisterNetEvent('mx_jail:setOSTime')
-AddEventHandler('mx_jail:setOSTime', function(targetxPlayer)
-    local osTime = os.time()
-
-    MySQL.update('UPDATE users SET jail_time = ? WHERE identifier = ?', {osTime, targetxPlayer.identifier})
+    MySQL.update('UPDATE users SET jail_time = ?, jailed_date = ?, jail_remaintime = ? WHERE identifier = ?', {osTime, jailedDate, time, targetxPlayer.identifier})
 end)
 
 -- Updates the time
 RegisterNetEvent('mx_jail:updateTime')
 AddEventHandler('mx_jail:updateTime', function(identifier, time)
     local osTime = os.time()
+    local raw = os.date("*t")
+    local clock
+    local date
+    
+    if Config.USClock then
+        clock = os.date("%I:%M %p")
+        date = raw.month.."/"..raw.day.."/"..raw.year
+    else
+        clock = os.date("%H:%M")
+        date = raw.day.."."..raw.month.."."..raw.year
+    end
 
-    MySQL.update('UPDATE users SET jail_time = ?, jail_remaintime = ? WHERE identifier = ?', {osTime, time, identifier})
+    local jailedDate = date.." ".. clock
+
+    MySQL.update('UPDATE users SET jail_time = ?, jailed_date = ?, jail_remaintime = ? WHERE identifier = ?', {osTime, jailedDate, time, identifier})
 end)
 
 -- clear the time when online
@@ -100,16 +125,18 @@ RegisterNetEvent('mx_jail:clearTime')
 AddEventHandler('mx_jail:clearTime', function(playerID, time)
     local xPlayer = ESX.GetPlayerFromId(playerID)
     local osTime = 0
+    local jailedDate = 01 ..".".. 01 ..".".. 2000
 
-    MySQL.update('UPDATE users SET jail_time = ?, jail_remaintime = ? WHERE identifier = ?', {osTime, time, xPlayer.identifier})
+    MySQL.update('UPDATE users SET jail_time = ?, jailed_date = ?, jail_remaintime = ? WHERE identifier = ?', {osTime, jailedDate, time, xPlayer.identifier})
 end)
 
 -- clear the time when player Offline
 RegisterNetEvent('mx_jail:clearTimeOffline')
 AddEventHandler('mx_jail:clearTimeOffline', function(identifier, time)
     local osTime = 0
+    local jailedDate = 01 ..".".. 01 ..".".. 2000
 
-    MySQL.update('UPDATE users SET jail_time = ?, jail_remaintime = ? WHERE identifier = ?', {osTime, time, identifier})
+    MySQL.update('UPDATE users SET jail_time = ?, jailed_date = ?, jail_remaintime = ? WHERE identifier = ?', {osTime, jailedDate, time, identifier})
 end)
 
 

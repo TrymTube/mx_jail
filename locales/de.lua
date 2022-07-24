@@ -23,10 +23,11 @@ Locales['de'] = {
     ['title_jail_list_ply'] = 'Inhaftierte Spieler',
     ['title_jail_list_time'] = 'Orig. Zeit',
     ['title_jail_list_timeleft'] = 'Verbleibende Zeit',
+    ['title_jail_list_date'] = 'Datum',
     ['title_jail_list_actions'] = 'Aktionen',
     ['action_jail_list_update'] = 'Update Inhaftierungszeit',
     ['action_jail_list_unjail'] = 'Entlassen',
-    ['title_jail_dialog_update_jailtime'] = 'Update Inhaftierungszeit von %s %s',
+    ['title_jail_dialog_update_jailtime'] = 'Update Inhaftierungszeit von %s',
 
     -- server/commands.lua -- Commands 
     ['chatnotify_max_jailtime'] = '[^1ERROR^0] Die max. Inhaftierungszeit beträgt ^3%s',

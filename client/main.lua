@@ -196,6 +196,81 @@ CreateThread(function()
     end
 end)
 
+AddEventHandler('mx_jail:openF6Menu', function()
+    openF6Menu()
+end)
+
+function openF6Menu()
+    local element = {}
+
+    if Config.F6JailPlayer then
+        table.insert(element, {label = _U('title_jail_person'), value = 'jail_person'})
+    end
+
+    table.insert(element, {label = _U('title_jailed_players'), value = 'jailed_players'})
+
+    ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'jail_f6main_menu', {
+        title    = _U('title_jail_menu'),
+		align    = 'left',
+		elements = element
+    }, function(data, menu)
+        if data.current.value == "jail_person" then
+            ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'jail_f6dialog_name',
+            {
+                title = _U('title_jail_dialog_playername')
+            },
+            function(data2, menu2)
+                
+                ESX.TriggerServerCallback('mx_jail:getNames', function(doesNameExist, player, source)
+                    if doesNameExist then
+                        ESX.TriggerServerCallback('mx_jail:getDBValuesPlayer', function(result, osTime)
+                            if result[1].jail_remaintime > 0 then
+                                TriggerEvent('mx_jail:playerNotify', _U('notify_player_alrd_jail'), 5000, 'error')
+                            else
+                                if source ~= player then
+                                    menu2.close()
+                                    ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'jail_f6dialog_time',
+                                    {
+                                        title = _U('title_jail_dialog_jailtime')
+                                    },
+                                    function(data3, menu3)
+                                        if tonumber(data3.value) >= Config.minJailTime then
+                                            if tonumber(data3.value) <= Config.maxJailTime then
+                                                TriggerServerEvent('mx_jail:jailPlayer', player)
+                                                TriggerServerEvent('mx_jail:setTime', player, data3.value)
+
+                                                TriggerEvent('mx_jail:playerNotify', _U('notify_jailed_player', data2.value), 5000, 'success')
+
+                                                menu3.close()
+                                            else
+                                                TriggerEvent('mx_jail:playerNotify', _U('notify_max_jailtime', Config.maxJailTime), 5000, 'error')
+                                            end
+                                        else
+                                            TriggerEvent('mx_jail:playerNotify', _U('notify_min_jailtime', Config.minJailTime), 5000, 'error')
+                                        end
+                                    end, function(data3, menu3)
+                                        menu3.close()
+                                    end)
+                                else
+                                    TriggerEvent('mx_jail:playerNotify', _U('notify_cant_jail_yourself'), 5000, 'error')
+                                end
+                            end
+                        end, player)
+                    else
+                        TriggerEvent('mx_jail:playerNotify', _U('notify_invalid_name'), 5000, 'error')
+                    end
+                end, data2.value)
+            end, function(data2, menu2)
+                menu2.close()
+            end)
+        elseif data.current.value == 'jailed_players' then
+            openListMenu()
+        end
+    end, function(data, menu)
+		menu.close()
+	end)
+end
+
 function openMenu()
     ESX.UI.Menu.CloseAll()
 
@@ -270,16 +345,16 @@ function openMenu()
 end
 
 function openListMenu()
-    ESX.TriggerServerCallback('mx_jail:getJailedPlayer', function(players, time)
-
+    ESX.TriggerServerCallback('mx_jail:getJailedPlayer', function(players, time, jailed_date)
         local elements = {
-            head = {_U('title_jail_list_ply'), _U('title_jail_list_time'), _U('title_jail_list_timeleft'), _U('title_jail_list_actions')},
+            head = {_U('title_jail_list_ply'), _U('title_jail_list_time'), _U('title_jail_list_timeleft'), _U('title_jail_list_date'), _U('title_jail_list_actions')},
             rows = {}
         }
         
         for k, v in pairs(players) do
-            if v.jail_time ~= nil and v.jail_time ~= 0 then  
-                local jailedName = ('%s %s'):format(v.firstname, v.lastname)
+            if v.jail_time ~= nil and v.jail_time ~= 0 then
+                local jailedName = v.firstname.." "..v.lastname
+                local jailedTime = v.jailed_date
 
                 local timeLeft = (time - v.jail_time) / 60
                 local timeRemaining = (v.jail_remaintime - timeLeft)
@@ -290,7 +365,8 @@ function openListMenu()
                         cols = {
                             jailedName,
                             v.jail_remaintime, 
-                            minutes, 
+                            minutes,
+                            jailedTime,
                             '{{'.._U('action_jail_list_update')..'|update}} {{' .. _U('action_jail_list_unjail') .. '|unjail}}'
                         }
                     })
@@ -311,7 +387,7 @@ function openListMenu()
             elseif data.value == 'update' then
                 ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'update_jailtime',
                 {
-                    title = _U('title_jail_dialog_update_jailtime', data.data.firstname, data.data.lastname)
+                    title = _U('title_jail_dialog_update_jailtime', data.data.firstname.." "..data.data.lastname)
                 },
                 function(data2, menu2)
                     if tonumber(data2.value) >= Config.minJailTime then
@@ -328,7 +404,7 @@ function openListMenu()
                             
                             openListMenu()
 
-                            TriggerEvent('mx_jail:playerNotify', _U('notify_updated_jailtime', jailedName, data.data.jail_remaintime, data2.value), 5000, 'success')
+                            TriggerEvent('mx_jail:playerNotify', _U('notify_updated_jailtime', data.data.firstname.." "..data.data.lastname, data.data.jail_remaintime, data2.value), 5000, 'success')
                         else
                             TriggerEvent('mx_jail:playerNotify', _U('notify_max_jailtime', Config.maxJailTime), 5000, 'error')
                         end

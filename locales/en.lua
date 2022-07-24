@@ -11,7 +11,7 @@ Locales['en'] = {
     ['notify_max_jailtime'] = 'the maximum jailtime is %s',
     ['notify_min_jailtime'] = 'the minimum jailtime is %s',
     ['notify_unjailed_player'] = 'you have successfully unjailed %s %s',
-    ['notify_updated_jailtime'] = 'you have have updated the jailtime of %s from %s to %s minutes',
+    ['notify_updated_jailtime'] = 'you have updated the jailtime of %s from %s to %s minutes',
     ['notify_jail_released'] = 'you got released from the jail',
         
     -- client/main.lua
@@ -23,10 +23,11 @@ Locales['en'] = {
     ['title_jail_list_ply'] = 'Jailed Person',
     ['title_jail_list_time'] = 'Orig. Time',
     ['title_jail_list_timeleft'] = 'Time Left',
+    ['title_jail_list_date'] = 'Date',
     ['title_jail_list_actions'] = 'Actions',
     ['action_jail_list_update'] = 'Update Jailtime',
     ['action_jail_list_unjail'] = 'Unjail',
-    ['title_jail_dialog_update_jailtime'] = 'Update Jailtime of %s %s',
+    ['title_jail_dialog_update_jailtime'] = 'Update Jailtime of %s',
 
     -- server/commands.lua -- Commands 
     ['chatnotify_max_jailtime'] = '[^1ERROR^0] The maximum jailtime is ^3%s',
