@@ -149,49 +149,50 @@ CreateThread(function()
 
     while true do
         Wait(1000)
+        if ESX.IsPlayerLoaded() then
+            ESX.TriggerServerCallback('mx_jail:getDBValues', function(result, time, remainTime) 
+                local timeLeft = (time - result[1].jail_time) / 60
+                local timeRemaining = (result[1].jail_remaintime - timeLeft)
 
-        ESX.TriggerServerCallback('mx_jail:getDBValues', function(result, time, remainTime) 
-            local timeLeft = (time - result[1].jail_time) / 60
-            local timeRemaining = (result[1].jail_remaintime - timeLeft)
+                if result[1].jail_remaintime ~= 0.0 then
+                    local player = PlayerPedId()
+                    local playerIndex = PlayerId()
+                    local playerId = GetPlayerServerId(playerIndex)
+                    
+                    sleep = false
 
-            if result[1].jail_remaintime ~= 0.0 then
-                local player = PlayerPedId()
-                local playerIndex = PlayerId()
-                local playerId = GetPlayerServerId(playerIndex)
-                
-                sleep = false
+                    if timeLeft > result[1].jail_remaintime then
+                        unJail(player)
+                        TriggerServerEvent('mx_jail:clearTime', playerId, 0)
+                    elseif timeLeft < result[1].jail_remaintime then
+                        local playerCoords = GetEntityCoords(player)
+                        local JailCoords = vec3(Config.JailCoords.x, Config.JailCoords.y, Config.JailCoords.z)
 
-                if timeLeft > result[1].jail_remaintime then
-                    unJail(player)
-                    TriggerServerEvent('mx_jail:clearTime', playerId, 0)
-                elseif timeLeft < result[1].jail_remaintime then
-                    local playerCoords = GetEntityCoords(player)
-                    local JailCoords = vec3(Config.JailCoords.x, Config.JailCoords.y, Config.JailCoords.z)
+                        local dist = #(JailCoords - playerCoords)
 
-                    local dist = #(JailCoords - playerCoords)
+                        if dist > 500 then
+                            if Config.teleportBack then
+                                teleportJail(player)
+                            end
+                        end
 
-                    if dist > 500 then
-                        if Config.teleportBack then
-                            teleportJail(player)
+                        if Config.Debug then
+                            print('Remaining Time: '..timeRemaining)
                         end
                     end
-
+                elseif result[1].jail_remaintime == 0.0 then 
+                    
                     if Config.Debug then
-                        print('Remaining Time: '..timeRemaining)
+                        print('not in jail')
                     end
-                end
-            elseif result[1].jail_remaintime == 0.0 then 
-                
-                if Config.Debug then
-                    print('not in jail')
-                end
 
-                sleep = true
+                    sleep = true
+                end
+            end)
+
+            if sleep then
+                Wait(5000)
             end
-        end)
-
-        if sleep then
-            Wait(5000)
         end
     end
 end)

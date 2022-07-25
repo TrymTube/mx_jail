@@ -1,6 +1,7 @@
 ESX = exports['es_extended']:getSharedObject()
 
 ESX.RegisterServerCallback('mx_jail:getDBValues', function(source, cb)
+    local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
    
     MySQL.Async.fetchAll('SELECT jail_time, jailed_date, jail_remaintime FROM users WHERE identifier = ?', {xPlayer.identifier}, function(result)

@@ -24,6 +24,10 @@ Do not resell or try to rip this Script in any way.
 
 ## Changelogs
 
+Version 1.2.2
+
+    - fixed error in line server/main.lua:6 xPlayer nil value
+
 Version 1.2.1
 
     - fixed able to jail himself

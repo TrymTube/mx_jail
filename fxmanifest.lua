@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Max'
 description 'jailsystem'
-version '1.2.0'
+version '1.2.2'
 
 lua54 'on'
 
