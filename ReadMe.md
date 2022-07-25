@@ -14,7 +14,7 @@ it allows players to quit the game while in jail and the time still runs
 ## SQL
 
 ALTER TABLE `users` ADD COLUMN `jail_time` INT NOT NULL DEFAULT '0';
-ALTER TABLE `users` ADD COLUMN `jailed_date` INT NOT NULL DEFAULT '0';
+ALTER TABLE `users` ADD COLUMN `jailed_date` VARCHAR(255) NOT NULL DEFAULT 'No Date';
 ALTER TABLE `users` ADD COLUMN `jail_remaintime` INT NOT NULL DEFAULT '0';
 
 ### TOS
@@ -23,6 +23,11 @@ Do not resell or try to rip this Script in any way.
 
 
 ## Changelogs
+
+Version 1.2.1
+
+    - fixed able to jail himself
+    - fixed database wrong SQL Insert // insert the jailed_date new!
 
 Version 1.2.0
 

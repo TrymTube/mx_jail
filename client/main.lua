@@ -299,7 +299,7 @@ function openMenu()
                             if result[1].jail_remaintime > 0 then
                                 TriggerEvent('mx_jail:playerNotify', _U('notify_player_alrd_jail'), 5000, 'error')
                             else
-                                -- if source ~= player then
+                                if source ~= player then
                                     menu2.close()
                                     ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'jail_dialog_time',
                                     {
@@ -323,9 +323,9 @@ function openMenu()
                                     end, function(data3, menu3)
                                         menu3.close()
                                     end)
-                                -- else
-                                --     TriggerEvent('mx_jail:playerNotify', _U('notify_cant_jail_yourself'), 5000, 'error')
-                                -- end
+                                else
+                                    TriggerEvent('mx_jail:playerNotify', _U('notify_cant_jail_yourself'), 5000, 'error')
+                                end
                             end
                         end, player)
                     else
