@@ -47,7 +47,6 @@ ESX.RegisterServerCallback('mx_jail:getNames', function(source, cb, name)
     end
 
     if doesNameExist then
-        print(doesNameExist)
         cb(true, targetxPlayer, source)
     elseif not doesNameExist then
         cb(false)
