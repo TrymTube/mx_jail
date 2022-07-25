@@ -10,9 +10,10 @@ Config.F6JailPlayer = true -- if true you can jail players with the F6 Police me
 
 Config.USClock = false -- this changes the clock style between 12h day and 24h day 
 
+Config.teleportJail = true -- when true the player gets teleported in jail
 Config.teleportBack = true -- teleports the player back when he tries to escape
 Config.JailCoords = vec4(1765.7, 2565.8, 45.5, 175.0) -- Coords x, y, z and heading for the Jail Coords
-Config.unjailCoords = vec4(1846.0, 2586.0, 45.6, 270.0) -- Coords when a player gets out of Jail
+Config.unjailCoords = vec4(1846.0, 2586.0, 45.6, 270.0) -- Coords x, y, z and heading for the Release Coords
 
 Config.minJailTime = 10 -- the mininum Jailtime which has to be applied
 Config.maxJailTime = 120 -- the maxinum Jailtime which can be applied

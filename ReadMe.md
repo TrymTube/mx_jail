@@ -24,6 +24,10 @@ Do not resell or try to rip this Script in any way.
 
 ## Changelogs
 
+Version 1.2.0
+
+    - added possibility to disable prisoner teleport when jailing
+
 Version 1.1.0
 
     - added the possibility to see when a prisoner got jailed // Date and Time 24h and 12h clock
@@ -42,4 +46,4 @@ Version 1.0.2
 
 Version 1.0.1
     
-    - fixed showing minus time left
+    - fixed showing time left in minus
