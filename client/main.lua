@@ -3,6 +3,24 @@ ESX = exports['es_extended']:getSharedObject()
 local currentPed
 local lastPed
 
+
+function getPlayerJob()
+    local job 
+    job = ESX.GetPlayerData().job.name
+    return job
+end
+
+function isAllowed()
+    local job = getPlayerJob()
+    local allowedjobs = Config.AllowedJobs
+    for i=1, #Config.AllowedJobs do 
+        if allowedjobs[i] == job then 
+            return true
+        end
+    end
+    return false
+end
+
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded',function(xPlayer, isNew, skin)
 
@@ -29,12 +47,7 @@ AddEventHandler('onResourceStop', function(name)
     if GetCurrentResourceName() ~= name then
         return
     end
-    
-    ESX.UI.Menu.Close('default', GetCurrentResourceName(), 'jail_main_menu')
-    ESX.UI.Menu.Close('list', GetCurrentResourceName(), 'jailed_players_list')
-    ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'jail_dialog_name')
-    ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'jail_dialog_time')
-    ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'update_jailtime')
+   closeResourceMens()
 end)
 
 CreateThread(function()
@@ -92,20 +105,11 @@ CreateThread(function()
                             TriggerEvent('mx_jail:playerNotify', _U('notify_checkJailTime', minutes), 5000, 'info')
                         end)
                     elseif v.pedAction == 'jailPlayer' then
-                        local hasJob = false
-                        ESX.TriggerServerCallback('mx_jail:getJob', function(Job)
-                            for _, v in pairs(Config.AllowedJobs) do
-                                if Job.name == v then
-                                    hasJob = true
-                                end
-                            end
-
-                            if hasJob then
+                            if isAllowed() then
                                 openMenu()
                             else
                                 TriggerEvent('mx_jail:playerNotify', _('notify_no_job'), 5000, 'info')
                             end
-                        end)
                     else
                         debug('^0[^3ERROR^0] Invalid pedAction')
                         debug('^0[^3ERROR^0] valid actions : \'checkJailTime\', \'jailPlayer\'')
@@ -116,11 +120,7 @@ CreateThread(function()
                 lastPed = currentPed
                 
             elseif dist > 2.0 and currentPed == k then 
-                ESX.UI.Menu.Close('default', GetCurrentResourceName(), 'jail_main_menu')
-                ESX.UI.Menu.Close('list', GetCurrentResourceName(), 'jailed_players_list')
-                ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'jail_dialog_name')
-                ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'jail_dialog_time')
-                ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'update_jailtime')
+                closeResourceMens()
                 TextShown = false
             end
         end
@@ -427,4 +427,12 @@ end)
 function teleportJail(target)
     SetEntityCoords(target, Config.JailCoords.x, Config.JailCoords.y, Config.JailCoords.z, false, false, false, false)
     SetEntityHeading(target, Config.JailCoords.w)
+end
+
+function closeResourceMens()
+    ESX.UI.Menu.Close('default', GetCurrentResourceName(), 'jail_main_menu')
+    ESX.UI.Menu.Close('list', GetCurrentResourceName(), 'jailed_players_list')
+    ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'jail_dialog_name')
+    ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'jail_dialog_time')
+    ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'update_jailtime')
 end

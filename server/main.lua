@@ -54,17 +54,6 @@ ESX.RegisterServerCallback('mx_jail:getNames', function(source, cb, name)
     end
 end)
 
-ESX.RegisterServerCallback('mx_jail:getJob', function(source, cb)
-    local xPlayer = ESX.GetPlayerFromId(source)
-    local JobName = xPlayer.getJob()
-    
-    if JobName then
-        cb(JobName)
-    else
-        cb('Error')
-    end
-end)
-
 ESX.RegisterServerCallback('mx_jail:getDBValuesPlayer', function(source, cb, playerId)
     local xPlayer = ESX.GetPlayerFromId(playerId)
    

@@ -1,14 +1,18 @@
 local hasJob = false
 
+function isAllowed(job)
+    local allowedjobs = Config.AllowedJobs
+    for i=1, #Config.AllowedJobs do 
+        if allowedjobs[i] == job then 
+            return true
+        end
+    end
+    return false
+end
+
 if Config.AllowCommands then
     ESX.RegisterCommand('jail', 'user', function(xPlayer, args, showError)
-        for _, v in pairs(Config.AllowedJobs) do
-            if xPlayer.getJob().name == v then
-                hasJob = true
-            end
-        end
-
-        if hasJob then
+        if isAllowed(xPlayer.getJob().name) then
             if tonumber(args.PlayerID) ~= nil and tonumber(args.JailTime) ~= nil then
                 if GetPlayerName(args.PlayerID) ~= nil then
                     if (tonumber(args.JailTime) >= Config.minJailTime) then
@@ -39,13 +43,7 @@ if Config.AllowCommands then
 
 
     ESX.RegisterCommand('unjail', 'user', function(sourcexPlayer, args, showError)
-        for _, v in pairs(Config.AllowedJobs) do
-            if sourcexPlayer.getJob().name == v then
-                hasJob = true
-            end
-        end
-
-        if hasJob then
+        if isAllowed(sourcexPlayer.getJob().name) then
             if args.PlayerID ~= nil then
                 if GetPlayerName(args.PlayerID) ~= nil then
                     local targetxPlayer = ESX.GetPlayerFromId(args.PlayerID)
