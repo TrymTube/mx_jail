@@ -87,11 +87,7 @@ CreateThread(function()
                 end
                 
                 if IsControlJustReleased(0, 38) then
-                    if Config.Debug then 
-                        print('Success')
-                        print('')
-                    end
-
+                    debug("Success")
                     if v.pedAction == 'checkJailTime' then
                         ESX.TriggerServerCallback('mx_jail:getDBValues', function(result, time) 
                             local timeLeft = (time - result[1].jail_time) / 60

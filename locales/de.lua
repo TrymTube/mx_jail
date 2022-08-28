@@ -1,10 +1,10 @@
 Locales['de'] = {
     -- client/main.lua -- Notifications
-    ['help_notify_checkJailTime'] = 'Drücke ~INPUT_CONTEXT~ um deine Zeit zu checken',
-    ['help_notify_jailPlayer'] = 'Drücke ~INPUT_CONTEXT~ um das Prison Menu zu öffnen',
-    ['notify_checkJailTime'] = '%s minuten verbleibend',
-    ['notify_no_job'] = 'du hast den nötigen Job',
-    ['notify_invalid_name'] = 'Name ungültig \ngebe einen gültigen Namen ein',
+    ['help_notify_checkJailTime'] = 'Drücke ~INPUT_CONTEXT~, um deine Zeit zu checken',
+    ['help_notify_jailPlayer'] = 'Drücke ~INPUT_CONTEXT~, um das Prison Menu zu öffnen',
+    ['notify_checkJailTime'] = '%s Minuten verbleibend',
+    ['notify_no_job'] = 'Du hast nicht den nötigen Job',
+    ['notify_invalid_name'] = 'Name ungültig, \ngebe einen gültigen Namen ein',
     ['notify_player_alrd_jail'] = 'Spieler ist bereits im Gefängnis',
     ['notify_jailed_player'] = 'Du hast %s inhaftiert',
     ['notify_cant_jail_yourself'] = 'Du kannst dich nicht selber inhaftieren',
@@ -25,9 +25,9 @@ Locales['de'] = {
     ['title_jail_list_timeleft'] = 'Verbleibende Zeit',
     ['title_jail_list_date'] = 'Datum',
     ['title_jail_list_actions'] = 'Aktionen',
-    ['action_jail_list_update'] = 'Update Inhaftierungszeit',
+    ['action_jail_list_update'] = 'Aktualisiere Inhaftierungszeit',
     ['action_jail_list_unjail'] = 'Entlassen',
-    ['title_jail_dialog_update_jailtime'] = 'Update Inhaftierungszeit von %s',
+    ['title_jail_dialog_update_jailtime'] = 'Aktualisiere Inhaftierungszeit von %s',
 
     -- server/commands.lua -- Commands 
     ['chatnotify_max_jailtime'] = '[^1ERROR^0] Die max. Inhaftierungszeit beträgt ^3%s',

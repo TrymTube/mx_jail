@@ -2,7 +2,7 @@ Config = {}
 
 Config.Debug = false
 
-Config.Locale = 'en' -- the language you want the script in
+Config.Locale = 'de' -- the language you want the script in
 
 Config.notification = 1 -- the notification type / 1 - ESX Notification, 2 - Export Notification - Standard okokNotify
 
@@ -37,3 +37,11 @@ Config.PedLocations = {
         pedHeading = 180.0,
     },
 }
+
+
+
+function debug(msg) 
+    if Config.Debug then 
+        print(msg)
+    end
+end
