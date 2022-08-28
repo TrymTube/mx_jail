@@ -53,7 +53,7 @@ if Config.AllowCommands then
                     MySQL.Async.fetchAll('SELECT jail_time, jail_remaintime FROM users WHERE identifier = ?', {targetxPlayer.identifier}, function(result)
 
                         if #result > 0 then
-                            print(ESX.DumpTable(result[1].jail_remaintime))
+                            debug(ESX.DumpTable(result[1].jail_remaintime))
                             if result[1].jail_remaintime > 0 then
                                 TriggerClientEvent('mx_jail:unJailPlayer', args.PlayerID)
 
@@ -61,8 +61,8 @@ if Config.AllowCommands then
                             else
                                 sourcexPlayer.triggerEvent('chatMessage', _U('chatnotify_not_jail', args.PlayerID))
                             end
-                        elseif Config.Debug then
-                            print('[^1ERROR^0] server/server.lua:101')
+                        else
+                            debug('[^1ERROR^0] server/server.lua:101')
                         end
                     end)
                 else

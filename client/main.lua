@@ -15,17 +15,12 @@ AddEventHandler('esx:playerLoaded',function(xPlayer, isNew, skin)
         local playerId = GetPlayerServerId(playerIndex)
 
         if (timeRemaining >= dbRemainTime) and (dbRemainTime == 0) then
-            if Config.Debug then
-                print('Jailtime has been set to 0')
-            end
+            debug('Jailtime has been set to 0')
 
             TriggerServerEvent('mx_jail:setTime', playerId, 0)
         elseif timeRemaining < result[1].jail_remaintime then
             teleportJail(PlayerPedId())
-
-            if Config.Debug then
-                print('Remaining Time: '..timeRemaining)
-            end
+            debug('Remaining Time: '..timeRemaining)
         end
     end)
 end)
@@ -112,13 +107,9 @@ CreateThread(function()
                             end
                         end)
                     else
-                        if Config.Debug then
-                            print('^0[^3ERROR^0] Invalid pedAction')
-                            print('^0[^3ERROR^0] valid actions : \'checkJailTime\', \'jailPlayer\'')
-                            TriggerEvent('mx_jail:playerNotify', '[ERROR] invalid pedAction \ncheck print for more information', 5000, 'info')
-                        else
-                            TriggerEvent('mx_jail:playerNotify', '[ERROR] invalid pedAction \nenable print for more information', 5000, 'info')
-                        end
+                        debug('^0[^3ERROR^0] Invalid pedAction')
+                        debug('^0[^3ERROR^0] valid actions : \'checkJailTime\', \'jailPlayer\'')
+                        TriggerEvent('mx_jail:playerNotify', '[ERROR] invalid pedAction \ncheck print for more information', 5000, 'info')
                     end
                 end
 
@@ -171,17 +162,10 @@ CreateThread(function()
                                 teleportJail(player)
                             end
                         end
-
-                        if Config.Debug then
-                            print('Remaining Time: '..timeRemaining)
-                        end
+                        debug('Remaining Time: '..timeRemaining)
                     end
                 elseif result[1].jail_remaintime == 0.0 then 
-                    
-                    if Config.Debug then
-                        print('not in jail')
-                    end
-
+                    debug('not in jail')
                     sleep = true
                 end
             end)

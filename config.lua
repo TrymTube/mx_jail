@@ -42,6 +42,6 @@ Config.PedLocations = {
 
 function debug(msg) 
     if Config.Debug then 
-        print(msg)
+        print("[DEBUG]: "..msg)
     end
 end
