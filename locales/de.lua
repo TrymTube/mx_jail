@@ -28,6 +28,20 @@ Locales['de'] = {
     ['action_jail_list_update'] = 'Update Inhaftierungszeit',
     ['action_jail_list_unjail'] = 'Entlassen',
     ['title_jail_dialog_update_jailtime'] = 'Update Inhaftierungszeit von %s',
+    
+    ['title_not_unjailed'] = 'Noch nicht entlassen',
+    ['title_jail_history'] = 'Gefängnis Logs',
+    ['title_jailed_id'] = 'ID',
+    ['title_jailed_name'] = 'Name',
+    ['title_jailed_date'] = 'Inhaftiert am',
+    ['title_jail_time'] = 'Haftzeit',
+    ['title_jailed_by'] = 'Inhaftiert von',
+    ['title_unjailed_by'] = 'Entlassen von',
+    ['title_unjailed_date'] = 'Entlassen am',
+    ['title_released'] = 'Haftzeit Abgesessen',
+
+    -- plugins/mx_jailbreak/jailbreak_client.lua
+    ['title_jailbreak'] = 'Ausgebrochen',
 
     -- server/commands.lua -- Commands 
     ['chatnotify_max_jailtime'] = '[^1ERROR^0] Die max. Inhaftierungszeit beträgt ^3%s',

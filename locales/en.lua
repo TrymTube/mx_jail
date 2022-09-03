@@ -29,6 +29,20 @@ Locales['en'] = {
     ['action_jail_list_unjail'] = 'Unjail',
     ['title_jail_dialog_update_jailtime'] = 'Update Jailtime of %s',
 
+    ['title_not_unjailed'] = 'not released yet',
+    ['title_jail_history'] = 'Prison Logs',
+    ['title_jailed_id'] = 'ID',
+    ['title_jailed_name'] = 'Name',
+    ['title_jailed_date'] = 'Jailed on',
+    ['title_jail_time'] = 'Jail Time',
+    ['title_jailed_by'] = 'Jailed by',
+    ['title_unjailed_by'] = 'Released by',
+    ['title_unjailed_date'] = 'Released on',
+    ['title_released'] = 'Jailtime Served',
+
+    -- plugins/mx_jailbreak/jailbreak_client.lua
+    ['title_jailbreak'] = 'Broken Out',
+
     -- server/commands.lua -- Commands 
     ['chatnotify_max_jailtime'] = '[^1ERROR^0] The maximum jailtime is ^3%s',
     ['chatnotify_min_jailtime'] = '[^1ERROR^0] The minimum jailtime is ^3%s',

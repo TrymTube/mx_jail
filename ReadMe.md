@@ -11,6 +11,10 @@ it allows players to quit the game while in jail and the time still runs
 - Add it in your server.cfg // `ensure mx_jail`
 - Enjoy
 
+If you want to use the Jailmenu with your police menu then use this trigger
+
+
+
 ## SQL
 
 ALTER TABLE `users` ADD COLUMN `jail_time` INT NOT NULL DEFAULT '0';
@@ -23,6 +27,15 @@ Do not resell or try to rip this Script in any way.
 
 
 ## Changelogs
+
+Version 1.3.1
+
+    - fixed potential xPlayer nil value // if the problem still persists contact me
+
+Version 1.3.0
+
+    - added possibility to set prisoner clothing
+    - added jail history // insert the new jail_history.sql in order to work
 
 Version 1.2.2
 
@@ -55,4 +68,4 @@ Version 1.0.2
 
 Version 1.0.1
     
-    - fixed showing time left in minus
+    - fixed showing negative time

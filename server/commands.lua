@@ -13,10 +13,15 @@ if Config.AllowCommands then
                 if GetPlayerName(args.PlayerID) ~= nil then
                     if (tonumber(args.JailTime) >= Config.minJailTime) then
                         if (tonumber(args.JailTime) <= Config.maxJailTime) then
+                            local targetxPlayer = ESX.GetPlayerFromId(args.PlayerID)
+                            local sourceName = xPlayer.getName()
 
                             TriggerClientEvent('mx_jail:jailPlayer', args.PlayerID)
 
+                            TriggerEvent('mx_jail:setHistory', args.PlayerID, args.JailTime, sourceName)
                             TriggerEvent('mx_jail:setTime', args.PlayerID, args.JailTime)
+
+                            TriggerClientEvent('mx_jail:playerNotify', xPlayer.source, _U('notify_jailed_player', args.PlayerID), 5000, 'success')
                         else
                             xPlayer.triggerEvent('chatMessage', _U('chatnotify_max_jailtime', Config.maxJailTime))
                         end
@@ -53,16 +58,16 @@ if Config.AllowCommands then
                     MySQL.Async.fetchAll('SELECT jail_time, jail_remaintime FROM users WHERE identifier = ?', {targetxPlayer.identifier}, function(result)
 
                         if #result > 0 then
-                            print(ESX.DumpTable(result[1].jail_remaintime))
                             if result[1].jail_remaintime > 0 then
                                 TriggerClientEvent('mx_jail:unJailPlayer', args.PlayerID)
 
+                                TriggerEvent('mx_jail:updateHistory', sourcexPlayer.source, args.PlayerID)
                                 TriggerEvent('mx_jail:clearTime', args.PlayerID, 0)
                             else
                                 sourcexPlayer.triggerEvent('chatMessage', _U('chatnotify_not_jail', args.PlayerID))
                             end
                         elseif Config.Debug then
-                            print('[^1ERROR^0] server/server.lua:101')
+                            print('[^1ERROR^0] server/commands.lua:57 no result')
                         end
                     end)
                 else

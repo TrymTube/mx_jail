@@ -23,6 +23,10 @@ AddEventHandler('esx:playerLoaded',function(xPlayer, isNew, skin)
         elseif timeRemaining < result[1].jail_remaintime then
             teleportJail(PlayerPedId())
 
+            if Config.UsePrisonerClothing then
+                getClothing()
+            end
+
             if Config.Debug then
                 print('Remaining Time: '..timeRemaining)
             end
@@ -130,10 +134,8 @@ CreateThread(function()
                 
             elseif dist > 2.0 and currentPed == k then 
                 ESX.UI.Menu.Close('default', GetCurrentResourceName(), 'jail_main_menu')
-                ESX.UI.Menu.Close('list', GetCurrentResourceName(), 'jailed_players_list')
                 ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'jail_dialog_name')
                 ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'jail_dialog_time')
-                ESX.UI.Menu.Close('dialog', GetCurrentResourceName(), 'update_jailtime')
                 TextShown = false
             end
         end
@@ -145,11 +147,17 @@ CreateThread(function()
 end)
 
 CreateThread(function()
-    local sleep = true
+    local loaded = false
 
     while true do
-        Wait(1000)
+        if not loaded then
+            Wait(10000)
+        end
+
         if ESX.IsPlayerLoaded() then
+            loaded = true
+
+            Wait(10000)
             ESX.TriggerServerCallback('mx_jail:getDBValues', function(result, time, remainTime) 
                 local timeLeft = (time - result[1].jail_time) / 60
                 local timeRemaining = (result[1].jail_remaintime - timeLeft)
@@ -162,7 +170,12 @@ CreateThread(function()
                     sleep = false
 
                     if timeLeft > result[1].jail_remaintime then
+                        ESX.TriggerServerCallback(name, function() 
+                            
+                        end, playerId)
+
                         unJail(player)
+                        TriggerServerEvent('mx_jail:updateHistory', nil, playerId)
                         TriggerServerEvent('mx_jail:clearTime', playerId, 0)
                     elseif timeLeft < result[1].jail_remaintime then
                         local playerCoords = GetEntityCoords(player)
@@ -208,6 +221,10 @@ function openF6Menu()
         table.insert(element, {label = _U('title_jail_person'), value = 'jail_person'})
     end
 
+    if Config.useHistory then
+        table.insert(element, {label = _U('title_jail_history'), value = 'jail_history'})
+    end
+
     table.insert(element, {label = _U('title_jailed_players'), value = 'jailed_players'})
 
     ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'jail_f6main_menu', {
@@ -228,7 +245,7 @@ function openF6Menu()
                             if result[1].jail_remaintime > 0 then
                                 TriggerEvent('mx_jail:playerNotify', _U('notify_player_alrd_jail'), 5000, 'error')
                             else
-                                if source ~= player then
+                                -- if source ~= player then
                                     menu2.close()
                                     ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'jail_f6dialog_time',
                                     {
@@ -237,7 +254,7 @@ function openF6Menu()
                                     function(data3, menu3)
                                         if tonumber(data3.value) >= Config.minJailTime then
                                             if tonumber(data3.value) <= Config.maxJailTime then
-                                                TriggerServerEvent('mx_jail:jailPlayer', player)
+                                                TriggerServerEvent('mx_jail:jailPlayer', player, data3.value, player)
                                                 TriggerServerEvent('mx_jail:setTime', player, data3.value)
 
                                                 TriggerEvent('mx_jail:playerNotify', _U('notify_jailed_player', data2.value), 5000, 'success')
@@ -252,9 +269,9 @@ function openF6Menu()
                                     end, function(data3, menu3)
                                         menu3.close()
                                     end)
-                                else
-                                    TriggerEvent('mx_jail:playerNotify', _U('notify_cant_jail_yourself'), 5000, 'error')
-                                end
+                                -- else
+                                --     TriggerEvent('mx_jail:playerNotify', _U('notify_cant_jail_yourself'), 5000, 'error')
+                                -- end
                             end
                         end, player)
                     else
@@ -266,6 +283,8 @@ function openF6Menu()
             end)
         elseif data.current.value == 'jailed_players' then
             openListMenu()
+        elseif data.current.value == 'jail_history' then
+            openJailHistory()
         end
     end, function(data, menu)
 		menu.close()
@@ -275,10 +294,15 @@ end
 function openMenu()
     ESX.UI.Menu.CloseAll()
 
-    local element = {
-        {label = _U('title_jail_person'), value = 'jail_person'},
-        {label = _U('title_jailed_players'), value = 'jailed_players'},
-    }
+    local element = {}
+    
+    table.insert(element, {label = _U('title_jail_person'), value = 'jail_person'})
+    
+    if Config.useHistory then
+        table.insert(element, {label = _U('title_jail_history'), value = 'jail_history'})
+    end
+    
+    table.insert(element, {label = _U('title_jailed_players'), value = 'jailed_players'})
 
     ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'jail_main_menu', {
         title    = _U('title_jail_menu'),
@@ -300,7 +324,7 @@ function openMenu()
                             if result[1].jail_remaintime > 0 then
                                 TriggerEvent('mx_jail:playerNotify', _U('notify_player_alrd_jail'), 5000, 'error')
                             else
-                                if source ~= player then
+                                -- if source ~= player then
                                     menu2.close()
                                     ESX.UI.Menu.Open('dialog', GetCurrentResourceName(), 'jail_dialog_time',
                                     {
@@ -309,7 +333,7 @@ function openMenu()
                                     function(data3, menu3)
                                         if tonumber(data3.value) >= Config.minJailTime then
                                             if tonumber(data3.value) <= Config.maxJailTime then
-                                                TriggerServerEvent('mx_jail:jailPlayer', player)
+                                                TriggerServerEvent('mx_jail:jailPlayer', player, data3.value, player)
                                                 TriggerServerEvent('mx_jail:setTime', player, data3.value)
 
                                                 TriggerEvent('mx_jail:playerNotify', _U('notify_jailed_player', data2.value), 5000, 'success')
@@ -324,9 +348,9 @@ function openMenu()
                                     end, function(data3, menu3)
                                         menu3.close()
                                     end)
-                                else
-                                    TriggerEvent('mx_jail:playerNotify', _U('notify_cant_jail_yourself'), 5000, 'error')
-                                end
+                                -- else
+                                --     TriggerEvent('mx_jail:playerNotify', _U('notify_cant_jail_yourself'), 5000, 'error')
+                                -- end
                             end
                         end, player)
                     else
@@ -339,6 +363,8 @@ function openMenu()
         elseif data.current.value == 'jailed_players' then
             openListMenu()
             menu.close()
+        elseif data.current.value == 'jail_history' then
+            openJailHistory()
         end
     end, function(data, menu)
 		menu.close()
@@ -422,9 +448,49 @@ function openListMenu()
     end)
 end
 
+function openJailHistory()
+    ESX.TriggerServerCallback('mx_jail:getHistory', function(results)
+        local elements = {
+            head = {_U('title_jailed_id'), _U('title_jailed_name'), _U('title_jailed_date'), _U('title_jail_time'), _U('title_jailed_by'), _U('title_unjailed_by'), _U('title_unjailed_date')},
+            rows = {}
+        }
+
+        for k, result in pairs(results) do
+            table.insert(elements.rows, {
+                data = result,
+                cols = {
+                    result.id,
+                    result.jailed_name,
+                    result.date,
+                    result.jail_time,
+                    result.jailed_by, 
+                    result.unjailed_by or _U('title_not_unjailed'),
+                    result.unjailed_date or _U('title_not_unjailed')
+                }
+            })
+            
+            if Config.Debug then
+                print(ESX.DumpTable(result))
+            end
+        end
+
+        ESX.UI.Menu.Open('list', GetCurrentResourceName(), 'jail_history', elements, function(data, menu)
+            
+        end, function(data, menu)
+            menu.close()
+        end)
+    end)
+end
+
 RegisterNetEvent('mx_jail:unJailPlayer')
 AddEventHandler('mx_jail:unJailPlayer', function(target)
     local targetPlayer = PlayerPedId(target)
+
+    if Config.UsePrisonerClothing then
+        ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
+            TriggerEvent('skinchanger:loadSkin', skin)
+        end)
+    end
 
     unJail(targetPlayer)
 end)
@@ -439,6 +505,10 @@ RegisterNetEvent('mx_jail:jailPlayer')
 AddEventHandler('mx_jail:jailPlayer', function(target)
     local targetPlayer = PlayerPedId(target)
     
+    if Config.UsePrisonerClothing then
+        getClothing()
+    end
+
     if Config.teleportJail then
         teleportJail(targetPlayer)
     end
@@ -447,4 +517,16 @@ end)
 function teleportJail(target)
     SetEntityCoords(target, Config.JailCoords.x, Config.JailCoords.y, Config.JailCoords.z, false, false, false, false)
     SetEntityHeading(target, Config.JailCoords.w)
+end
+
+function getClothing()
+    local playerPed = PlayerPedId()
+    
+    TriggerEvent('skinchanger:getSkin', function(skin)
+        if skin.sex == 0 then
+            TriggerEvent("skinchanger:loadClothes", skin, Config.PrisonerClothing.male)
+        else
+            TriggerEvent("skinchanger:loadClothes", skin, Config.PrisonerClothing.female)
+        end
+    end)
 end
