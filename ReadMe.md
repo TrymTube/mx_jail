@@ -13,13 +13,17 @@ it allows players to quit the game while in jail and the time still runs
 
 If you want to use the Jailmenu with your police menu then use this trigger
 
+```lua
+TriggerEvent("mx_jail:openF6Menu")
+```
 
 
 ## SQL
-
+```sql
 ALTER TABLE `users` ADD COLUMN `jail_time` INT NOT NULL DEFAULT '0';
 ALTER TABLE `users` ADD COLUMN `jailed_date` VARCHAR(255) NOT NULL DEFAULT 'No Date';
 ALTER TABLE `users` ADD COLUMN `jail_remaintime` INT NOT NULL DEFAULT '0';
+```
 
 ### TOS
 
@@ -27,6 +31,15 @@ Do not resell or try to rip this Script in any way.
 
 
 ## Changelogs
+
+Version 1.5.1
+    - fixed possible deadloop crash
+
+Version 1.5.0
+    - added teleportback dist Config option
+
+Version 1.4.0
+    - added Spanish Translation
 
 Version 1.3.1
 

@@ -53,7 +53,7 @@ CreateThread(function()
         RequestModel(v.pedModel)
         
         while not HasModelLoaded(v.pedModel) do
-          Wait(1)
+            Wait(1)
         end
 
         ped = CreatePed(4, v.pedModel, coords, v.pedHeading, false, true)
@@ -150,6 +150,8 @@ CreateThread(function()
     local loaded = false
 
     while true do
+        Wait(1)
+        
         if not loaded then
             Wait(10000)
         end
