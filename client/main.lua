@@ -501,6 +501,16 @@ function unJail(target)
     TriggerEvent('mx_jail:playerNotify', _U('notify_jail_released'), 3000, 'success')
     SetEntityCoords(target, Config.unjailCoords.x, Config.unjailCoords.y, Config.unjailCoords.z, false, false, false, false)
     SetEntityHeading(target, Config.unjailCoords.w)
+	 ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin, jobSkin)
+        local isMale = skin.sex == 0
+
+         TriggerEvent('skinchanger:loadDefaultModel', isMale, function()
+            ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin)
+                TriggerEvent('skinchanger:loadSkin', skin)
+                TriggerEvent('esx:restoreLoadout')
+            end)
+        end)
+    end)
 end
 
 RegisterNetEvent('mx_jail:jailPlayer')
